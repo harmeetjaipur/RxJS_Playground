@@ -4,8 +4,12 @@ import 'rxjs/add/observable/from';
 
 import { getSubscriber } from './utils/getSubscriber';
 
-const nums = [34, 45, 56, 78, 89, 90];
+const users = [
+  { name: 'John Doe', email: 'jdoe@gmail.com' },
+  { name: 'Sam  Smith', email: 'ssmith@gmail.com' },
+  { name: 'Jen Thompson', email: 'jthompson@gmail.com' },
+];
 
-const nums$ = Observable.from(nums);
+const users$ = Observable.from(users);
 
-nums$.subscribe(getSubscriber('nums'));
+users$.subscribe(getSubscriber('users'));
