@@ -1,12 +1,12 @@
 import $ from 'jquery';
 import { Observable } from 'rxjs/Observable';
 import publish from 'rxjs/add/operator/publish';
-import interval from 'rxjs/add/observable/interval';
+import { interval, count as refCount } from 'rxjs/add/observable';
 import { getSubscriber } from './utils/getSubscriber';
 
-const source$ = Observable.interval(2000).publish();
-
-source$.connect();
+const source$ = Observable.interval(2000)
+  .publish()
+  .refCount();
 
 setTimeout(() => {
   source$.subscribe(getSubscriber('one'));
