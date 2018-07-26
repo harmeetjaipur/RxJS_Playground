@@ -4,8 +4,8 @@ import 'rxjs/add/observable/from';
 
 import { getSubscriber } from './utils/getSubscriber';
 
-const m = new Map([[1, 2], [3, 4], [5, 6]]);
+const str = 'Hello World!';
 
-const m$ = Observable.from(m);
+const str$ = Observable.from(str);
 
-m$.subscribe(getSubscriber('Map'));
+str$.subscribe(getSubscriber('Str'));
