@@ -4,18 +4,8 @@ import 'rxjs/add/observable/from';
 
 import { getSubscriber } from './utils/getSubscriber';
 
-// const users = [
-//   { name: 'John Doe', email: 'jdoe@gmail.com' },
-//   { name: 'Sam  Smith', email: 'ssmith@gmail.com' },
-//   { name: 'Jen Thompson', email: 'jthompson@gmail.com' },
-// ];
+const m = new Map([[1, 2], [3, 4], [5, 6]]);
 
-// const users$ = Observable.from(users);
+const m$ = Observable.from(m);
 
-// users$.subscribe(getSubscriber('users'));
-
-const s = new Set(['Foo', 43, { name: 'Jeff' }]);
-
-const s$ = Observable.from(s);
-
-s$.subscribe(getSubscriber('set'));
+m$.subscribe(getSubscriber('Map'));
