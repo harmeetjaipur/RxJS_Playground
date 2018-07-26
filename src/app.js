@@ -26,6 +26,10 @@ inputStream$.subscribe(
   () => console.log('Completed'),
 );
 
-const mouseMove$ = Observable.fromEvent(document, 'mousemove').subscribe(x => {
-  coords.innerHTML = x.clientX + ' ' + x.clientY;
-});
+const mouseMove$ = Observable.fromEvent(document, 'mousemove').subscribe(
+  x => {
+    coords.innerHTML = x.clientX + ' ' + x.clientY;
+  },
+  err => console.error(err),
+  () => console.log('Completed'),
+);
