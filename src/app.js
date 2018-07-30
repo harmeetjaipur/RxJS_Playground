@@ -23,9 +23,11 @@ import range from 'rxjs/add/observable/range';
 import timer from 'rxjs/add/observable/timer';
 import mergeOp from 'rxjs/add/operator/merge';
 import mergeAll from 'rxjs/add/operator/mergeAll';
+import mergeMap from 'rxjs/add/operator/mergeMap';
 import concatAll from 'rxjs/add/operator/concatAll';
 import merge from 'rxjs/add/observable/merge';
 import concat from 'rxjs/add/observable/concat';
+import concatMap from 'rxjs/add/operator/concatMap';
 import filter from 'rxjs/add/operator/filter';
 import distinct from 'rxjs/add/operator/distinct';
 import distinctUntilChanged from 'rxjs/add/operator/distinctUntilChanged';
@@ -33,39 +35,33 @@ import debounceTime from 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/observable/from';
 import of from 'rxjs/add/observable/of';
 import { getSubscriber } from './utils/getSubscriber';
+import { resolve } from 'path';
 
 // TODO: implement `bind` operator to perform operations/funcs on Observables
 // obj::func
 // // is equivalent to:
 // func.bind(obj)
 
+// Wrong way: Nested subscribe()
+// Observable.of('Hello').subscribe(v => {
+//   Observable.of(`${v}  World`).subscribe(getSubscriber('Wrong'));
+// });
+
+// Right way: user mergeMap()
 // Observable.of('Hello')
-//   .merge(Observable.of('World'))
-//   .subscribe(getSubscriber('Merge'));
+//   .mergeMap(v => Observable.of(`${v} World!`))
+//   .subscribe(getSubscriber('Right'));
 
-// Observable.interval(2000)
-//   .merge(Observable.interval(500))
-//   .take(25)
-//   .subscribe(getSubscriber('Merge'));
+// const myPromise = v => new Promise((res, rej) => res(`${v} World from Promise!`));
 
-// let source1$ = Observable.interval(2000).map(v => `M1: ${v}`);
-// let source2$ = Observable.interval(500).map(v => `M2: ${v}`);
+// Observable.of('Hello')
+//   .mergeMap(x => myPromise(x))
+//   .subscribe(getSubscriber('Promise'));
 
-// Observable.merge(source1$, source2$)
-//   .take(25)
-//   .subscribe(getSubscriber('Merge'));
-
-// Observable.range(0, 3)
-//   .map(x => Observable.range(0, 3))
-//   .mergeAll()
-//   .subscribe(getSubscriber('Merge All'));
-
-// let source1$ = Observable.range(1, 5).map(v => `Source1: ${v}`);
-// let source2$ = Observable.range(6, 5).map(v => `Source2: ${v}`);
-
-// Observable.concat(source1$, source2$).subscribe(getSubscriber('Concat'));
-
-// Observable.range(0, 3)
-//   .map(x => Observable.range(x, 3))
-//   .concatAll()
-//   .subscribe(getSubscriber('All'));
+Observable.range(0, 10)
+  .concatMap((x, i) =>
+    Observable.interval(100)
+      .take(x)
+      .map(() => i),
+  )
+  .subscribe(getSubscriber('C All'));
