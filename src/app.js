@@ -21,6 +21,10 @@ import fromPromise from 'rxjs/add/observable/fromPromise';
 import fromEvent from 'rxjs/add/observable/fromEvent';
 import range from 'rxjs/add/observable/range';
 import timer from 'rxjs/add/observable/timer';
+import filter from 'rxjs/add/operator/filter';
+import distinct from 'rxjs/add/operator/distinct';
+import distinctUntilChanged from 'rxjs/add/operator/distinctUntilChanged';
+import debounceTime from 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/observable/from';
 import of from 'rxjs/add/observable/of';
 import { getSubscriber } from './utils/getSubscriber';
@@ -30,37 +34,39 @@ import { getSubscriber } from './utils/getSubscriber';
 // // is equivalent to:
 // func.bind(obj)
 
-// const source$ = new Observable(observer => {
-//   observer.next(1);
-//   observer.next(2);
-//   observer.next('Hello');
-//   observer.next('World');
+// Observable.range(0, 10)
+//   .filter((x, i, obs) => x >= 5)
+//   .subscribe(getSubscriber('filter'));
 
-//   observer.complete();
-// });
+// Observable.range(0, 10)
+//   .filter((x, i, obs) => x % 2 === 0)
+//   .subscribe(getSubscriber('filter'));
 
-// source$.first().subscribe(getSubscriber('First'));
+let input = document.getElementById('input');
+let output = document.getElementById('output');
 
-// source$.last().subscribe(getSubscriber('Last'));
+// let products = [
+//   { sku: '001', name: 'Red T-Shirt', price: 4.99 },
+//   { sku: '002', name: 'Blue Pants', price: 9.99 },
+//   { sku: '003', name: 'Green Hat', price: 7.99 },
+//   { sku: '004', name: 'Yellow Jacket', price: 24.99 },
+// ];
 
-// source$.single().subscribe(getSubscriber('Single'));
+// let input$ = Observable.fromEvent(input, 'keyup')
+//   .map(e => e.target.value)
+//   .subscribe(x => {
+//     Observable.from(products)
+//       .filter(({ sku }) => sku === x)
+//       .subscribe(y => (output.innerHTML = `<h1>${y.name}: $${y.price}</h1>`));
+//   });
 
-// source$.find((x, i, observer) => x === 'Hello').subscribe(getSubscriber('Find'));
+// Observable.fromEvent(input, 'keyup')
+//   .map(e => e.target.value)
+//   .distinct()
+//   .debounceTime(300)
+//   .subscribe(getSubscriber('Debounce Time'));
 
-// source$.findIndex((x, i, observer) => x === 'Hello').subscribe(getSubscriber('Index Found'));
-
-// source$.take(2).subscribe(getSubscriber('Take'));
-
-// source$.skip(2).subscribe(getSubscriber('Skip'));
-
-// const source$ = Observable.range(1, 20);
-
-// source$
-//   .skipWhile(i => i <= 5)
-//   .takeWhile(i => i < 10)
-//   .subscribe(getSubscriber('Skip'));
-
-Observable.interval(500)
-  .skipUntil(Observable.timer(2000))
-  .takeUntil(Observable.timer(7000))
-  .subscribe(getSubscriber('Skip Until'));
+// Observable.of(23, 23, 55, 43, 55, 67, 44, 43, 78, 23)
+//   .distinctUntilChanged()
+//   .distinct()
+//   .subscribe(getSubscriber('Value'));
