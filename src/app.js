@@ -21,6 +21,11 @@ import fromPromise from 'rxjs/add/observable/fromPromise';
 import fromEvent from 'rxjs/add/observable/fromEvent';
 import range from 'rxjs/add/observable/range';
 import timer from 'rxjs/add/observable/timer';
+import mergeOp from 'rxjs/add/operator/merge';
+import mergeAll from 'rxjs/add/operator/mergeAll';
+import concatAll from 'rxjs/add/operator/concatAll';
+import merge from 'rxjs/add/observable/merge';
+import concat from 'rxjs/add/observable/concat';
 import filter from 'rxjs/add/operator/filter';
 import distinct from 'rxjs/add/operator/distinct';
 import distinctUntilChanged from 'rxjs/add/operator/distinctUntilChanged';
@@ -34,39 +39,33 @@ import { getSubscriber } from './utils/getSubscriber';
 // // is equivalent to:
 // func.bind(obj)
 
-// Observable.range(0, 10)
-//   .filter((x, i, obs) => x >= 5)
-//   .subscribe(getSubscriber('filter'));
+// Observable.of('Hello')
+//   .merge(Observable.of('World'))
+//   .subscribe(getSubscriber('Merge'));
 
-// Observable.range(0, 10)
-//   .filter((x, i, obs) => x % 2 === 0)
-//   .subscribe(getSubscriber('filter'));
+// Observable.interval(2000)
+//   .merge(Observable.interval(500))
+//   .take(25)
+//   .subscribe(getSubscriber('Merge'));
 
-let input = document.getElementById('input');
-let output = document.getElementById('output');
+// let source1$ = Observable.interval(2000).map(v => `M1: ${v}`);
+// let source2$ = Observable.interval(500).map(v => `M2: ${v}`);
 
-// let products = [
-//   { sku: '001', name: 'Red T-Shirt', price: 4.99 },
-//   { sku: '002', name: 'Blue Pants', price: 9.99 },
-//   { sku: '003', name: 'Green Hat', price: 7.99 },
-//   { sku: '004', name: 'Yellow Jacket', price: 24.99 },
-// ];
+// Observable.merge(source1$, source2$)
+//   .take(25)
+//   .subscribe(getSubscriber('Merge'));
 
-// let input$ = Observable.fromEvent(input, 'keyup')
-//   .map(e => e.target.value)
-//   .subscribe(x => {
-//     Observable.from(products)
-//       .filter(({ sku }) => sku === x)
-//       .subscribe(y => (output.innerHTML = `<h1>${y.name}: $${y.price}</h1>`));
-//   });
+// Observable.range(0, 3)
+//   .map(x => Observable.range(0, 3))
+//   .mergeAll()
+//   .subscribe(getSubscriber('Merge All'));
 
-// Observable.fromEvent(input, 'keyup')
-//   .map(e => e.target.value)
-//   .distinct()
-//   .debounceTime(300)
-//   .subscribe(getSubscriber('Debounce Time'));
+// let source1$ = Observable.range(1, 5).map(v => `Source1: ${v}`);
+// let source2$ = Observable.range(6, 5).map(v => `Source2: ${v}`);
 
-// Observable.of(23, 23, 55, 43, 55, 67, 44, 43, 78, 23)
-//   .distinctUntilChanged()
-//   .distinct()
-//   .subscribe(getSubscriber('Value'));
+// Observable.concat(source1$, source2$).subscribe(getSubscriber('Concat'));
+
+// Observable.range(0, 3)
+//   .map(x => Observable.range(x, 3))
+//   .concatAll()
+//   .subscribe(getSubscriber('All'));
