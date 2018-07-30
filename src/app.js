@@ -3,63 +3,37 @@ import { Observable } from 'rxjs/Observable';
 import map from 'rxjs/add/operator/map';
 import pluck from 'rxjs/add/operator/pluck';
 import take from 'rxjs/add/operator/take';
+import buffer from 'rxjs/add/operator/buffer';
+import bufferCount from 'rxjs/add/operator/bufferCount';
+import bufferTime from 'rxjs/add/operator/bufferTime';
 import interval from 'rxjs/add/observable/interval';
 import fromPromise from 'rxjs/add/observable/fromPromise';
 import fromEvent from 'rxjs/add/observable/fromEvent';
+import range from 'rxjs/add/observable/range';
 import 'rxjs/add/observable/from';
 import of from 'rxjs/add/observable/of';
 import { getSubscriber } from './utils/getSubscriber';
 
+// TODO: implement bind operator to perform operations/funcs on Observables
+// obj::func
+// // is equivalent to:
+// func.bind(obj)
+
 // Observable.interval(1000)
-//   .take(10)
-//   .map(v => v * v)
-//   .subscribe(getSubscriber('map'));
+//   .buffer(Observable.interval(2000))
+//   .subscribe(getSubscriber('buffer'));
 
-// let names = ['Bob', 'John', 'Mike'];
+// Observable.range(1, 100)
+//   .bufferCount(4)
+//   .subscribe(getSubscriber('bcount'));
 
-// Observable.from(names)
-//   .map(v => v.toUpperCase())
-//   .subscribe(getSubscriber('Names'));
+// Observable.interval(1000)
+//   .bufferTime(5000)
+//   .subscribe(getSubscriber('btime'));
 
-// const input = document.getElementById('input');
-// const length = document.getElementById('length');
+const obs1$ = Observable.interval(1000);
+const obs2$ = Observable.fromEvent(document, 'click');
 
-// Observable.fromEvent(input, 'keyup')
-//   .map(e => e.target.value)
-//   .map(v => {
-//     return {
-//       value: v,
-//       length: v.length,
-//     };
-//   })
-//   .subscribe(e => {
-//     length.innerHTML = e.length;
-//   });
+const myBuffer = obs1$.buffer(obs2$);
 
-// function getGithubUser(userName) {
-//   return $
-//     .ajax({
-//       url: `https://api.github.com/users/${userName}?client_id=6a6b7b4c083f4d7a224d&client_secret=2f3879b89e0c6e104062530ac484e6fee8a7f5e6`,
-//       dataType: 'jsonp',
-//     })
-//     .promise();
-// }
-
-// Observable.fromPromise(getGithubUser('harmeetjaipur'))
-//   .map(obj => obj.data)
-//   .subscribe(user => {
-//     console.log(user);
-//   });
-
-// Observable.interval(2000)
-//   .take(10)
-//   .mapto('Hello World')
-//   .subscribe(getSubscriber('mapto'));
-
-const arr = [{ val: 0 }, { val: 1 }, { val: 2 }, { val: 3 }, { val: 4 }];
-
-Observable.from(arr)
-  .pluck('val')
-  .subscribe(x => {
-    console.log(x);
-  });
+const subscribe = myBuffer.subscribe(getSubscriber('Buffered  Values'));
