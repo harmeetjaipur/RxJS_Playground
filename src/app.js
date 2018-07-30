@@ -1,35 +1,65 @@
 import $ from 'jquery';
 import { Observable } from 'rxjs/Observable';
-import publish from 'rxjs/add/operator/publish';
+import map from 'rxjs/add/operator/map';
+import pluck from 'rxjs/add/operator/pluck';
+import take from 'rxjs/add/operator/take';
+import interval from 'rxjs/add/observable/interval';
 import fromPromise from 'rxjs/add/observable/fromPromise';
 import fromEvent from 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/observable/from';
 import of from 'rxjs/add/observable/of';
 import { getSubscriber } from './utils/getSubscriber';
 
-const input = document.getElementById('input');
-const profile = document.getElementById('profile');
+// Observable.interval(1000)
+//   .take(10)
+//   .map(v => v * v)
+//   .subscribe(getSubscriber('map'));
 
-profile.style.display = 'none';
+// let names = ['Bob', 'John', 'Mike'];
 
-Observable.fromEvent(input, 'keyup').subscribe(e => {
-  Observable.fromPromise(getGithubUser(e.target.value)).subscribe(user => {
-    profile.style.display = 'block';
-    document.getElementById('name').innerHTML = user.data.name || 'No name found.';
-    document.getElementById('login').innerHTML = user.data.login;
-    document.getElementById('blog').innerHTML = user.data.blog;
-    document.getElementById('avatar').innerHTML = user.data.avatar_url;
-    document.getElementById('repos').innerHTML = user.data.public_repos;
-    document.getElementById('followers').innerHTML = user.data.followers;
-    document.getElementById('following').innerHTML = user.data.following;
-    document.getElementById('link').setAttribute('href', user.data.html_url);
+// Observable.from(names)
+//   .map(v => v.toUpperCase())
+//   .subscribe(getSubscriber('Names'));
+
+// const input = document.getElementById('input');
+// const length = document.getElementById('length');
+
+// Observable.fromEvent(input, 'keyup')
+//   .map(e => e.target.value)
+//   .map(v => {
+//     return {
+//       value: v,
+//       length: v.length,
+//     };
+//   })
+//   .subscribe(e => {
+//     length.innerHTML = e.length;
+//   });
+
+// function getGithubUser(userName) {
+//   return $
+//     .ajax({
+//       url: `https://api.github.com/users/${userName}?client_id=6a6b7b4c083f4d7a224d&client_secret=2f3879b89e0c6e104062530ac484e6fee8a7f5e6`,
+//       dataType: 'jsonp',
+//     })
+//     .promise();
+// }
+
+// Observable.fromPromise(getGithubUser('harmeetjaipur'))
+//   .map(obj => obj.data)
+//   .subscribe(user => {
+//     console.log(user);
+//   });
+
+// Observable.interval(2000)
+//   .take(10)
+//   .mapto('Hello World')
+//   .subscribe(getSubscriber('mapto'));
+
+const arr = [{ val: 0 }, { val: 1 }, { val: 2 }, { val: 3 }, { val: 4 }];
+
+Observable.from(arr)
+  .pluck('val')
+  .subscribe(x => {
+    console.log(x);
   });
-});
-
-function getGithubUser(userName) {
-  return $
-    .ajax({
-      url: `https://api.github.com/users/${userName}?client_id=6a6b7b4c083f4d7a224d&client_secret=2f3879b89e0c6e104062530ac484e6fee8a7f5e6`,
-      dataType: 'jsonp',
-    })
-    .promise();
-}

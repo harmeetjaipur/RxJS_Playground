@@ -6,57 +6,11 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"> </head>
 
 <body>
-  <div class="container">
-    <br />
-    <br />
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <input type="text" class="form-control" id="input" placeholder="Search Github User...">
-      </div>
-    </div>
-    <br />
-
-    <div id="profile">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title" id="name"></h3>
-        </div>
-        <div class="panel-body">
-          <div class="col-md-4">
-            <img class="img-thumbnail" id="avatar">
-          </div>
-          <div class="col-md-8">
-            <span class="label label-primary">
-              <span id="repos"></span>
-              Public Repos
-            </span>
-            <span class="label label-success">
-              <span id="followers"></span>
-              Followers
-            </span>
-            <span class="label label-info">
-              <span id="following"></span>
-              Following
-            </span>
-            <br />
-            <br />
-            <ul>
-              <li class="list-group-item">Login:
-                <span id="login"></span>
-              </li>
-              <li class="list-group-item">Blog URL:
-                <span id="blog"></span>
-              </li>
-            </ul>
-            <br />
-            <br />
-            <a id="link" class="btn btn-primary btn-lg" target="_blank">View Profile</a>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
+  <input type="text" id="input">
+  <br />Char length:
+  <strong>
+    <span id="length"></span>
+  </strong>
   <script src="./dist/app.bundle.js"></script>
 </body>
 
