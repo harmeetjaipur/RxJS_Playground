@@ -26,8 +26,12 @@ import mergeAll from 'rxjs/add/operator/mergeAll';
 import mergeMap from 'rxjs/add/operator/mergeMap';
 import concatAll from 'rxjs/add/operator/concatAll';
 import merge from 'rxjs/add/observable/merge';
+import zip from 'rxjs/add/observable/zip';
+import combineLatest from 'rxjs/add/observable/combineLatest';
+import withLatestFrom from 'rxjs/add/operator/withLatestFrom';
 import concat from 'rxjs/add/observable/concat';
 import concatMap from 'rxjs/add/operator/concatMap';
+import delay from 'rxjs/add/operator/delay';
 import filter from 'rxjs/add/operator/filter';
 import distinct from 'rxjs/add/operator/distinct';
 import distinctUntilChanged from 'rxjs/add/operator/distinctUntilChanged';
@@ -37,31 +41,52 @@ import of from 'rxjs/add/observable/of';
 import { getSubscriber } from './utils/getSubscriber';
 import { resolve } from 'path';
 
+import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ReplaySubject, AsyncSubject } from 'rxjs';
+
 // TODO: implement `bind` operator to perform operations/funcs on Observables
 // obj::func
 // // is equivalent to:
 // func.bind(obj)
 
-// Wrong way: Nested subscribe()
-// Observable.of('Hello').subscribe(v => {
-//   Observable.of(`${v}  World`).subscribe(getSubscriber('Wrong'));
-// });
+// const subject$ = new Subject();
 
-// Right way: user mergeMap()
-// Observable.of('Hello')
-//   .mergeMap(v => Observable.of(`${v} World!`))
-//   .subscribe(getSubscriber('Right'));
+// subject$.subscribe(getSubscriber('Subject'));
 
-// const myPromise = v => new Promise((res, rej) => res(`${v} World from Promise!`));
+// subject$.next('Hello');
+// subject$.next('World');
 
-// Observable.of('Hello')
-//   .mergeMap(x => myPromise(x))
-//   .subscribe(getSubscriber('Promise'));
+// const interval$ = new Observable.interval(1000);
+// const intervalSubject$ = new Subject();
 
-Observable.range(0, 10)
-  .concatMap((x, i) =>
-    Observable.interval(100)
-      .take(x)
-      .map(() => i),
-  )
-  .subscribe(getSubscriber('C All'));
+// interval$.subscribe(intervalSubject$);
+
+// intervalSubject$.subscribe(getSubscriber('S1'));
+// intervalSubject$.subscribe(getSubscriber('S2'));
+// intervalSubject$.subscribe(getSubscriber('S3'));
+
+// setTimeout(() => intervalSubject$.subscribe(getSubscriber('S4')), 4000);
+
+// Behaviour subject
+// const subject$ = new BehaviorSubject(45);
+
+// subject$.next(55);
+// subject$.complete();
+
+// Replay
+// const subject$ = new ReplaySubject(4);
+
+// subject$.next(1);
+// subject$.next(2);
+// subject$.next(3);
+// subject$.next(4);
+
+// subject$.subscribe(getSubscriber('Replay'));
+
+const subject$ = new AsyncSubject();
+
+subject$.next(1);
+subject$.next(2);
+subject$.complete();
+subject$.subscribe(getSubscriber('Async'));
